@@ -1,5 +1,5 @@
 //Diogo Alves Silveira - 120110867
-//Roteiro 3
+//Roteiro 3 Segunda Questão
 
 parameter divide_by=100000000;  // divisor do clock de referência
 // A frequencia do clock de referencia é 50 MHz.
@@ -19,7 +19,6 @@ module top(input  logic clk_2,
            output logic lcd_MemWrite, lcd_Branch, lcd_MemtoReg, lcd_RegWrite);
 
   always_comb begin
-    LED <= SWI;
     lcd_WriteData <= SWI;
     lcd_pc <= 'h12;
     lcd_instruction <= 'h34567890;
@@ -38,24 +37,13 @@ module top(input  logic clk_2,
     lcd_a <= {56'h1234567890ABCD, SWI};
     lcd_b <= {SWI, 56'hFEDCBA09876543};
   end
-  
-  /*always_comb begin
-    LED[0] <= SWI[0] & SWI[1];
-    LED[1] <= SWI[0] | SWI[1];
-  end*/
-  
-  parameter LETRA_A = 'b01110111;
-  parameter LETRA_B = 'b00011111;
-  parameter LETRA_N = 'b00010101;
-  parameter LETRA_D = 'b00111101;
-  
-  always_comb nota <= SWI;
-  
+
   always_comb begin
-    if (~SWI[0] and ~SWI[1]) SEG <= LETRA_A; 
-    else if(SWI[0] and ~SWI[1]) SEG <= LETRA_N;
-    else if(~SWI[0] and SWI[1]) SEG <= LETRA_B;
-    else SEG <= LETRA_D;
+    if(~SWI[4:3] & SWI[6:5] & SWI[7]) LED[7:6] <= 1;
+    else if(SWI[4:3] & ~SWI[6:5] & ~SWI[7]) LED[7:6] <= 1;
+    else if(SWI[4:3] & SWI[6:5] & ~SWI[7]) LED[7:6] <= 1;
+    else if(SWI[4:3] & SWI[6:5] & SWI[7]) LED[7:6] <= 1;
+    else LED[7:6] <= 0;
   end
 
 endmodule
