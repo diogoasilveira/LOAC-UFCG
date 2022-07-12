@@ -1,5 +1,5 @@
-//Diogo Alves Silveira - 120110867
-//Roteiro 3
+// DESCRIPTION: Verilator: Systemverilog example module
+// with interface to switch buttons, LEDs, LCD and register display
 
 parameter divide_by=100000000;  // divisor do clock de referência
 // A frequencia do clock de referencia é 50 MHz.
@@ -38,51 +38,44 @@ module top(input  logic clk_2,
     lcd_b <= {SWI, 56'hFEDCBA09876543};
   end
   
-  // EXEMPLO 
-
   logic reset, in_bit, out_bit;
-  
+  parameter tamanho = 4;
+
   always_comb reset <= SWI[0];
   always_comb in_bit <= SWI[4];
 	
-  enum logic [2:0] { reset_state, read_1_zero, read_1_one, read_2_zero, read_2_one }  state;
-
+  enum logic [tamanho-1 : 0] {A, B, C, D } state;
+    
   always_ff @ (posedge clk_2)
-     if (reset) state <= reset_state;
+     if (reset) state <= A;
      else
 		unique case (state)
-			reset_state:
+			A:
 				if (in_bit == 0)
-					state <= read_1_zero;
+					state <= A;
 				else 
-					state <= read_1_one;
-			read_1_zero:
+					state <= B;
+			B:
 				if (in_bit == 0)
-					state <= read_2_zero;
+					state <= A;
 				else
-					state <= read_1_one;
-			read_2_zero:
+					state <= C;
+			C:
 				if (in_bit == 0)
-					state <= read_2_zero;
+					state <= A;
 				else
-					state <= read_1_one;
-			read_1_one:
+					state <= D;
+			D:
 				if (in_bit == 0)
-					state <= read_1_zero;
+					state <= A;
 				else
-					state <= read_2_one;
-			read_2_one:
-				if (in_bit == 0)
-					state <= read_1_zero;
-				else
-					state <= read_2_one;
-
+					state <= D;
 		endcase
 
-  always_comb out_bit <= (state == read_2_zero) || (state == read_2_one);
+  always_comb out_bit <= (state == D);
+
 
   
   always_comb LED[0] <= clk_2;      
   always_comb LED[7] <= out_bit;
-  
 endmodule
