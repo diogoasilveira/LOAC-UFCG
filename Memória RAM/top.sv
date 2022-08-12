@@ -62,9 +62,9 @@ module top(input  logic clk_2,
   always_comb LED[0] <= clk_2;  
   always_comb LED[7:4] <= data_out;
   
-endmodule
+//endmodule
 
-memória RAM R/W
+//memória RAM R/W
 // EXEMPLO 
 
   parameter ADDR_WIDTH = 2;
@@ -92,8 +92,8 @@ memória RAM R/W
   always_comb LED[5:4] <= mem[addr];
   always_comb LED[7:6] <= rdata;  
   
-endmodule
-memória RAM ROM
+//endmodule
+//memória RAM ROM
 // EXEMPLO 
 
   parameter ADDR_WIDTH = 2;
